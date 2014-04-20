@@ -1,0 +1,85 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\title{FFT Equations}
+\author{Ernest Kirstein - s0751387@monmouth.edu}
+
+\newcommand{\qed}[0]{$\square$}
+\newcommand{\qef}[0]{$\blacksquare$}
+\newcommand{\degree}[1]{{^\circ}\text{#1}}
+\newcommand{\Z}[0]{\mathbb{Z}}
+\newcommand{\Chi}{\mathcal{X}}
+\newcommand{\true}{\text{True}}
+\newcommand{\false}{\text{False}}
+\newcommand{\st}{\text{ s.t. }}
+
+\begin{document}
+
+\maketitle
+
+\section*{Definition}
+\begin{align*}
+F(x) &= f\\
+f[k] &= \sum_{j=0}^{N-1} x[j]\left(e^{-2\pi i k/N}\right)^j\\
+0 &\leq k < N
+\end{align*}
+
+\section*{Inverse}
+\begin{align*}
+f &= f_r+f_i\\
+f^c &= f_r-f_i\\
+F^{-1}(f) &= \frac{1}{N}[F(f^c)]^c
+\end{align*}
+
+\section*{Convolutions}
+\begin{align*}
+F(f*g) &= F(f)F(g)\\
+f*g &= F^{-1}(F(f)F(g))
+\end{align*}
+
+\section*{Derivation}
+\begin{align*}
+f[k] &= \sum_{j=0}^{N-1} x[j]\left(e^{-2\pi i k/N}\right)^j\\
+&= \sum_{j=0}^{N/2-1} x[2j]\left(e^{-2\pi i k/N}\right)^{2j}
++\sum_{j=0}^{N/2-1} x[2j+1]\left(e^{-2\pi i k/N}\right)^{2j+1}\\
+&= \sum_{j=0}^{N/2-1} x[2j]\left(e^{-2\pi i k/N}\right)^{2j}
++e^{-2\pi i k/N}\sum_{j=0}^{N/2-1} x[2j+1]\left(e^{-2\pi i k/N}\right)^{2j}\\
+f[k] &= \sum_{j=0}^{N/2-1} x[2j]\left(e^{-2\pi i k/(N/2)}\right)^{j}
++e^{-2\pi i k/N}\sum_{j=0}^{N/2-1} x[2j+1]\left(e^{-2\pi i k/(N/2)}\right)^{j}\\
+f[k] &= f_e[k]+e^{-2\pi i k/N}f_o[k]
+\end{align*}
+
+\begin{align*}
+f_e[k] &= f_e[k \text{ mod } N/2]\\
+f_o[k] &= f_o[k \text{ mod } N/2]\\
+f[k] &= f_e[k]+e^{-2\pi i k/N}f_o[k]\\
+f[k+N/2] &= f_e[k]+e^{-2\pi i (k+N/2)/N}f_o[k]\\
+&= f_e[k]+e^{-\pi i}e^{-2\pi i k/N}f_o[k]\\
+&= f_e[k]-e^{-2\pi i k/N}f_o[k]
+\end{align*}
+
+\section*{Result}
+\begin{align*}
+f[k] &= f_e[k]+e^{-2\pi i k/N}f_o[k]\\
+f[k+N/2] &= f_e[k]-e^{-2\pi i k/N}f_o[k]
+\end{align*}
+
+\section*{Polynomial Convolution Example}
+\begin{align*}
+\{a_n\} &= \{1,2,3,4\}\\
+\{b_n\} &= \{2,1,2,1\}\\
+\{c_n\} &= \{a_n\}*\{b_n\}\\
+\{c_n\} &= \{2,5,10,16,12,11,4\}\\
+P_a(x) &= 1+2x+3x^2+4x^3\\
+P_b(x) &= 2+1x+2x^2+1x^3\\
+P_c(x) &= P_a(x)P_b(x)\\
+&= (1+2x+3x^2+4x^3)(2+1x+2x^2+1x^3)\\
+&= 2+5x+10x^2+16x^3+12x^4+11x^5+4x^6\\
+&= P_{a*b}(x)
+\end{align*}
+
+
+\end{document}
